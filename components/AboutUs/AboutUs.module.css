@@ -1,0 +1,49 @@
+.aboutUs {
+  width: 80%;
+  margin: 3rem auto;
+  background-color: var(--main-bg-color);
+  color: var(--icons-color);
+}
+
+.aboutUs_box {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.aboutUs_box_right {
+  padding-right: 6rem;
+}
+
+.aboutUs_box_right h1 {
+  font-size: 5rem;
+  line-height: 1;
+}
+
+.aboutUs_box_right p {
+  margin-bottom: 2rem;
+}
+
+@media screen and (max-width: 35em) {
+  .aboutUs {
+    width: 90%;
+  }
+}
+
+@media screen and (max-width: 55em) {
+  .aboutUs_box {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+
+  .aboutUs_box_right {
+    padding-right: 1rem;
+  }
+
+  .aboutUs_box_right h1 {
+    line-height: 1;
+    font-size: 3rem;
+  }
+}
+
+  
