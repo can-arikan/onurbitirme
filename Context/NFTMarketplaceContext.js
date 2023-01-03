@@ -7,21 +7,23 @@ import { create as ipfsHttpClient } from "ipfs-http-client";
 
 // const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 
-const projectId = "2Imfr1lqxFCmilma5ON79gHvtIH";
-const projectSecretKey = "9a69606a482aa08743b3a0f9c8bde895";
+const projectId = "2Jon4maffYPwCaDN50S8s1W2GKN";
+const projectSecretKey = "ba90443414921035ac1eff94fe58db5c";
 const auth = `Basic ${Buffer.from(`${projectId}:${projectSecretKey}`).toString(
   "base64"
 )}`;
 
-const subdomain = "https://sabanci-nft-marketplace.infura-ipfs.io";
+const subdomain = "https://main-sunft.infura-ipfs.io";
 
 const client = ipfsHttpClient({
   host: "infura-ipfs.io",
   port: 5001,
   protocol: "https",
+  apiPath: '/api/v0',
   headers: {
     authorization: auth,
   },
+  mode: 'no-cors',
 });
 
 // internal import (abi and address from constants)
@@ -110,9 +112,10 @@ export const NFTMarketplaceProvider = (({children}) => {
         const added = await client.add(data);
         const url = `https://infura-ipfs.io/ipfs/${added.path}`;
         await createSale(url, price);
-        router.push("/searchPage");
+        //router.push("/searchPage");
       } catch (error) {
         console.log("Error while creating NFT");
+        console.log(error);
       }  
     };
 
@@ -183,6 +186,7 @@ export const NFTMarketplaceProvider = (({children}) => {
         return items;
       } catch (error) {
         console.log("Error while fetching nft");
+        console.log(error);
       }
     };
   

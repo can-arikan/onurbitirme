@@ -3,8 +3,8 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ["sabanci-nft-marketplace.infura-ipfs.io", "infura-ipfs.io"],
+    domains: ["main-sunft.infura-ipfs.io", "infura-ipfs.io"],
   },
 }
-
+// https://main-sunft.infura-ipfs.io
 module.exports = nextConfig
