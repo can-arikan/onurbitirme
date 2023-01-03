@@ -148,6 +148,7 @@ export const NFTMarketplaceProvider = (({children}) => {
 
     // function to fetch nfts
     const fetchNFTs = async () => {
+      axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
       try {
         const provider = new ethers.providers.JsonRpcProvider();
         const contract = fetchContract(provider);
@@ -162,7 +163,9 @@ export const NFTMarketplaceProvider = (({children}) => {
   
               const {
                 data: { image, name, description },
-              } = await axios.get(tokenURI);
+              } = await axios.get('https://cors-anywhere.herokuapp.com/'+tokenURI,{
+
+              });
               const price = ethers.utils.formatUnits(
                 unformattedPrice.toString(),
                 "ether"
@@ -196,6 +199,7 @@ export const NFTMarketplaceProvider = (({children}) => {
 
     // function to fetch my nft or listed nfts
     const fetchMyNFTsOrListedNFTs = async (type) => {
+      axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
       try {
         const contract = await connectingWithSmartContract();
   
@@ -210,7 +214,7 @@ export const NFTMarketplaceProvider = (({children}) => {
               const tokenURI = await contract.tokenURI(tokenId);
               const {
                 data: { image, name, description },
-              } = await axios.get(tokenURI);
+              } = await axios.get('https://cors-anywhere.herokuapp.com/'+tokenURI);
               const price = ethers.utils.formatUnits(
                 unformattedPrice.toString(),
                 "ether"
