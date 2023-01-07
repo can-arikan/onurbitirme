@@ -105,6 +105,11 @@ contract NFTMarketplace is ERC721URIStorage {
         _;
     }
 
+    // Define the owner() function to return the contract owner.
+    function getOwner() public view returns (address) {
+        return owner;
+    }
+
     constructor() ERC721("NFT Token", "SU NFT") {
         owner = payable(msg.sender);
         addToWhitelist(msg.sender, "contractOwnerUgur");

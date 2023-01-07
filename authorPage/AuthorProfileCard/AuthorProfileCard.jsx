@@ -20,7 +20,7 @@ import Style from "./AuthorProfileCard.module.css";
 import images from "../../img";
 import { Button1 } from "../../components/componentindex.js";
 
-const AuthorProfileCard = ({currentAccount,connectWallet,checkWhitelist}) => {
+const AuthorProfileCard = ({currentAccount,connectWallet,checkWhitelist,checkOwner}) => {
   const [share, setShare] = useState(false);
   const [report, setReport] = useState(false);
 
@@ -51,6 +51,7 @@ const AuthorProfileCard = ({currentAccount,connectWallet,checkWhitelist}) => {
   };
   const router = useRouter();
   const [whitelistCheckResult, setWhitelistCheckResult] = useState(null);
+  const [ownerCheckResult, setOwnerCheckResultCheckResult] = useState(null);
 
   async function fetchWhitelistCheckResult() {
     // Call the contract function to get the whitelist check result
@@ -58,15 +59,17 @@ const AuthorProfileCard = ({currentAccount,connectWallet,checkWhitelist}) => {
     const isWhitelisted = await checkWhitelist();
     console.log("BU WL WALLET DEGIL" + isWhitelisted);
     setWhitelistCheckResult(isWhitelisted);
-    /*checkWhitelist().then((isWhitelisted) => {
-      console.log(isWhitelisted);
-      setWhitelistCheckResult(isWhitelisted);
-    });*/
-    // Update the state variable with the result
-    //setWhitelistCheckResult(result);
+  }
+  async function fetchOwnerCheckResult() {
+    // Call the contract function to get the whitelist check result
+    //const result = await marketplace.isWhitelisted(account);
+    const isOwner = await checkOwner();
+    console.log("BU OWNER WALLET DEGIL" + isOwner);
+    setOwnerCheckResultCheckResult(isOwner);
   }
   useEffect(() => {
     fetchWhitelistCheckResult();
+    fetchOwnerCheckResult();
   }, []);
 
   return (
@@ -199,6 +202,27 @@ const AuthorProfileCard = ({currentAccount,connectWallet,checkWhitelist}) => {
             </p>
           )}
         </div>
+        <div className={Style.navbar_container_right_button}>
+            {currentAccount == "" ? (
+              <Button1 btnName="Connect" handleClick={() => connectWallet()} />
+            ) : (
+              <Button1
+                btnName="Add Whitelist Wallet"
+                handleClick={
+                  () => {
+                    if (ownerCheckResult) {
+                      router.push("/addwhitelist");
+                      console.log("whitelistCheckResult");
+
+                    } else {
+                      alert("Error: You are not owner of the Contract.");
+                    }
+                  }
+                }
+              />
+
+            )}
+          </div>
       </div>
     </div>
   );

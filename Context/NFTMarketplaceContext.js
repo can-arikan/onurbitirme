@@ -172,6 +172,30 @@ export const NFTMarketplaceProvider = (({ children }) => {
       console.log("error while checking whitelist", (error));
     }
   };
+  const checkOwner = async () => {
+    try {
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      const contract = await connectingWithSmartContract();
+      const result = await contract.getOwner();
+      var isOwner;
+      if (result.toLowerCase() === (accounts[0]).toLowerCase()) {
+        isOwner = true;
+      }
+      else {
+        isOwner = false;
+      }
+      console.log("resultc : " + isOwner);
+      console.log("result : " + result);
+      console.log("account : " + accounts[0]);
+
+      return isOwner;
+
+    } catch (error) {
+      console.log("error while checking owner ", (error));
+    }
+  };
 
   // function to fetch nfts
   const fetchNFTs = async () => {
@@ -296,6 +320,7 @@ export const NFTMarketplaceProvider = (({ children }) => {
         createNFT,
         createSale,
         checkWhitelist,
+        checkOwner,
         fetchNFTs,
         fetchMyNFTsOrListedNFTs,
         buyNFT,

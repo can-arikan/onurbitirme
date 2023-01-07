@@ -12,7 +12,7 @@ import { CgMenuLeft, CgMenuRight } from 'react-icons/cg';
 
 // internal import
 import Style from "./NavBar.module.css";
-import { Discover, HelpCenter, Notification, Profile, SideBar, ProfileDropDown } from './index';
+import { Discover, HelpCenter, Notification, Profile, SideBar} from './index';
 import { Button1 } from '../componentindex';
 import { Button } from 'react-bootstrap';
 import images from '../../img';
@@ -63,13 +63,6 @@ const NavBar = () => {
       setDiscover(false);
       setprofileDrop(false);
       setHelp(true);
-      setNotification(false);
-      setProfile(false);
-    }
-    else if (btnText == "ProfileDropDown") {
-      setDiscover(false);
-      setprofileDrop(true);
-      setHelp(false);
       setNotification(false);
       setProfile(false);
     }

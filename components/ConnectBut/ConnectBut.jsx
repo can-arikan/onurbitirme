@@ -1,9 +1,9 @@
 import React from "react";
 
 // internal import
-import Style from "./Button.module.css";
+import Style from "./ConnectBut.css";
 
-const Button1 = ({ btnName, handleClick, icon, classStyle }) => {
+const ConnectBut = ({ btnName, handleClick, icon, classStyle }) => {
   return (
     <div className={Style.box}>
       <button
@@ -16,4 +16,4 @@ const Button1 = ({ btnName, handleClick, icon, classStyle }) => {
   );
 };
 
-export default Button1;
+export default ConnectBut;
