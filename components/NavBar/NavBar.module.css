@@ -95,6 +95,9 @@
 .navbar_container_right_profile_box{
     position: relative;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    
 }
 
 .navbar_container_right_profile{

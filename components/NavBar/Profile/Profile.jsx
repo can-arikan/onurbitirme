@@ -1,4 +1,4 @@
-import React from "react";
+import React,  { useState, useEffect} from "react";
 import Image from "next/image";
 import { FaUserAlt, FaRegImage, FaUserEdit } from "react-icons/fa";
 import { MdHelpCenter } from "react-icons/md";
@@ -9,12 +9,30 @@ import Link from "next/link";
 import Style from "./Profile.module.css";
 import images from "../../../img";
 
-const Profile = ({ currentAccount }) => {
+const Profile = ({ currentAccount,checkWhitelist}) => {
+  const [whitelistCheckResult, setWhitelistCheckResult] = useState(null);
+
+  async function fetchWhitelistCheckResult() {
+    // Call the contract function to get the whitelist check result
+    //const result = await marketplace.isWhitelisted(account);
+    const isWhitelisted = await checkWhitelist();
+    console.log("BU WL WALLET DEGIL" + isWhitelisted);
+    setWhitelistCheckResult(isWhitelisted);
+    /*checkWhitelist().then((isWhitelisted) => {
+      console.log(isWhitelisted);
+      setWhitelistCheckResult(isWhitelisted);
+    });*/
+    // Update the state variable with the result
+    //setWhitelistCheckResult(result);
+  }
+  useEffect(() => {
+    fetchWhitelistCheckResult();
+  }, []);
   return (
     <div className={Style.profile}>
       <div className={Style.profile_account}>
         <Image
-          src={images.user1}
+          src={images.default_user}
           alt="user profile"
           width={50}
           height={50}
@@ -23,8 +41,10 @@ const Profile = ({ currentAccount }) => {
 
         {/* for now, we manually provide an address */}
         <div className={Style.profile_account_info}>
-          <p>Uğur Aşıkoğlu</p>
-          <small>{currentAccount.slice(0, 18)}..</small>
+          <p></p>
+          <medium>{currentAccount ? currentAccount.slice(0, 18) : null}..</medium>
+          <p></p>
+          <medium>{whitelistCheckResult? "Whitelisted User":" Not Whitelisted User"}</medium>
         </div>
       </div>
 
@@ -56,12 +76,6 @@ const Profile = ({ currentAccount }) => {
             <MdHelpCenter />
             <p>
               <Link href={{ pathname: "/help" }}>Help</Link>
-            </p>
-          </div>
-          <div className={Style.profile_menu_one_item}>
-            <TbDownload />
-            <p>
-              <Link href={{ pathname: "/disconnect" }}>Disconnect</Link>
             </p>
           </div>
         </div>

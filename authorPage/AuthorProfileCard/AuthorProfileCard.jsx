@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import {
   MdVerified,
   MdCloudUpload,
@@ -19,7 +20,7 @@ import Style from "./AuthorProfileCard.module.css";
 import images from "../../img";
 import { Button1 } from "../../components/componentindex.js";
 
-const AuthorProfileCard = ({currentAccount}) => {
+const AuthorProfileCard = ({currentAccount,connectWallet,checkWhitelist}) => {
   const [share, setShare] = useState(false);
   const [report, setReport] = useState(false);
 
@@ -48,6 +49,25 @@ const AuthorProfileCard = ({currentAccount}) => {
       setReport(false);
     }
   };
+  const router = useRouter();
+  const [whitelistCheckResult, setWhitelistCheckResult] = useState(null);
+
+  async function fetchWhitelistCheckResult() {
+    // Call the contract function to get the whitelist check result
+    //const result = await marketplace.isWhitelisted(account);
+    const isWhitelisted = await checkWhitelist();
+    console.log("BU WL WALLET DEGIL" + isWhitelisted);
+    setWhitelistCheckResult(isWhitelisted);
+    /*checkWhitelist().then((isWhitelisted) => {
+      console.log(isWhitelisted);
+      setWhitelistCheckResult(isWhitelisted);
+    });*/
+    // Update the state variable with the result
+    //setWhitelistCheckResult(result);
+  }
+  useEffect(() => {
+    fetchWhitelistCheckResult();
+  }, []);
 
   return (
     <div className={Style.AuthorProfileCard}>
@@ -104,6 +124,27 @@ const AuthorProfileCard = ({currentAccount}) => {
         </div>
 
         <div className={Style.AuthorProfileCard_box_share}>
+          <div className={Style.navbar_container_right_button}>
+            {currentAccount == "" ? (
+              <Button1 btnName="Connect" handleClick={() => connectWallet()} />
+            ) : (
+              <Button1
+                btnName="Mint NFT"
+                handleClick={
+                  () => {
+                    if (whitelistCheckResult) {
+                      router.push("/uploadNFT");
+                      console.log("whitelistCheckResult");
+
+                    } else {
+                      alert("Error: You are not whitelisted.");
+                    }
+                  }
+                }
+              />
+
+            )}
+          </div>
           <Button1 btnName="Follow" handleClick={() => {}} />
           <MdCloudUpload
             onClick={() => openShare()}

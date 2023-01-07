@@ -13,7 +13,7 @@ contract NFTMarketplace is ERC721URIStorage {
     Counters.Counter private _itemsSold;
 
     uint256 listingPrice = 0.025 ether;
-    address payable owner;
+    address payable public owner;
 
     mapping(uint256 => MarketItem) private idToMarketItem;
 
@@ -23,6 +23,70 @@ contract NFTMarketplace is ERC721URIStorage {
         address payable owner;
         uint256 price;
         bool sold;
+    }
+
+    // The contract defines a struct to represent an address on the
+    // whitelist.
+    struct WhitelistEntry {
+        // The address of the whitelisted account.
+        address account;
+        // The name of the whitelisted account.
+        string name;
+    }
+
+    // The contract defines a mapping to store the whitelist entries.
+    // The keys of the mapping are the whitelisted addresses, and the
+    // values are the corresponding whitelist entries.
+    mapping(address => WhitelistEntry) public whitelist;
+
+    // The contract also defines an array to store the whitelist entries
+    // in the order in which they were added. This allows us to iterate
+    // over the whitelist entries in the order in which they were added.
+    WhitelistEntry[] public whitelistArray;
+
+    // The contract defines an event that is emitted whenever a new
+    // address is added to the whitelist.
+    event WhitelistAdded(
+        // The address of the account that was added to the whitelist.
+        address account,
+        // The name of the account that was added to the whitelist.
+        string name
+    );
+
+    // The contract defines a function to check if a given address is
+    // on the whitelist.
+    function isWhitelisted(address account) public view returns (bool) {
+        // Return true if the given address is on the whitelist,
+        // and false otherwise.
+        return whitelist[account].account != address(0);
+    }
+
+    // The contract defines a function to add a new address to the
+    // whitelist. Only the contract owner is allowed to call this
+    // function.
+    function addToWhitelist(address account, string memory name)
+        public
+    {
+        // Ensure that the given address is not already on the whitelist.
+        require(
+            whitelist[account].account == address(0),
+            "Address is already on the whitelist."
+        );
+
+        // Create a new whitelist entry for the given address.
+        WhitelistEntry memory entry = WhitelistEntry({
+            account: account,
+            name: name
+        });
+
+        // Add the entry to the whitelist mapping and array.
+        whitelist[account] = entry;
+        whitelistArray.push(entry);
+
+        //whitelistArray[0].name= "contractOwnerUgur";
+
+        // Emit an event to indicate that the address was added to the whitelist.
+        emit WhitelistAdded(account, name);
     }
 
     event MarketItemCreated(
@@ -43,6 +107,7 @@ contract NFTMarketplace is ERC721URIStorage {
 
     constructor() ERC721("NFT Token", "SU NFT") {
         owner = payable(msg.sender);
+        addToWhitelist(msg.sender, "contractOwnerUgur");
     }
 
     /* Updates the listing price of the contract */

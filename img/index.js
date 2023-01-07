@@ -56,6 +56,7 @@ import founder4 from "./founder4.jpg";
 import kitty from './kitty.png';
 import aboutus from './aboutus.jpg';
 import loader from "./loadergif.gif";
+import default_user from "./default_user.jpeg";
 
 export default {
   hero2,
@@ -116,4 +117,5 @@ export default {
   kitty,
   aboutus,
   loader,
+  default_user,
 };

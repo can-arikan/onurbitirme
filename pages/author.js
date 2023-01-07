@@ -55,7 +55,7 @@ const author = () => {
   const [follower, setFollower] = useState(false);
   const [following, setFollowing] = useState(false);
 
-  const { fetchMyNFTsOrListedNFTs, currentAccount } = useContext(
+  const { fetchMyNFTsOrListedNFTs, currentAccount, connectWallet, checkWhitelist } = useContext(
     NFTMarketplaceContext
   );
 
@@ -77,7 +77,7 @@ const author = () => {
   return (
     <div className={Style.author}>
       <Banner bannerImage={images.creatorbackground2} />
-      <AuthorProfileCard currentAccount={currentAccount}/>
+      <AuthorProfileCard currentAccount={currentAccount} connectWallet={connectWallet} checkWhitelist={checkWhitelist}/>
       <AuthorTaps
         setCollectiables={setCollectiables}
         setCreated={setCreated}
@@ -95,15 +95,7 @@ const author = () => {
         nfts={nfts}
         myNFTS={myNFTs}
       />
-      <Title
-        heading="Popular Creators"
-        //paragraph="Click on music icon and enjoy NTF music or audio"
-      />
-      <div className={Style.author_box}>
-        {followerArray.map((el, i) => (
-          <FollowerTabCard i={i} el={el} />
-        ))}
-      </div>
+
     </div>
   );
 };
