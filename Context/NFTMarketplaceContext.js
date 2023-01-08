@@ -13,6 +13,12 @@ const auth = `Basic ${Buffer.from(`${projectId}:${projectSecretKey}`).toString(
   "base64"
 )}`;
 
+const projectIdWl = "2IRuT56ohLhR9zJhxIIMPqiBhxT";
+const projectSecretKeyWl = "2c77769df36589eb858242de1f2ae3d4";
+const authWl = `Basic ${Buffer.from(`${projectIdWl}:${projectSecretKeyWl}`).toString(
+  "base64"
+)}`;
+
 const subdomain = "https://main-sunft.infura-ipfs.io";
 
 const client = ipfsHttpClient({
@@ -22,6 +28,16 @@ const client = ipfsHttpClient({
   apiPath: '/api/v0',
   headers: {
     authorization: auth,
+  },
+  mode: 'no-cors',
+});
+const clientWl = ipfsHttpClient({
+  host: "infura-ipfs.io",
+  port: 5001,
+  protocol: "https",
+  apiPath: '/api/v0',
+  headers: {
+    authorization: authWl,
   },
   mode: 'no-cors',
 });
@@ -127,6 +143,22 @@ export const NFTMarketplaceProvider = (({ children }) => {
       //router.push("/searchPage");
     } catch (error) {
       console.log("Error while creating NFT");
+      console.log(error);
+    }
+  };
+
+  const addToWhitelist = async (username, walletAddress) => {
+    if (!username || !walletAddress) return console.log("Data is missing");
+    const data = JSON.stringify({ username, walletAddress });
+    try {
+      console.log("WL WALLET ADD OPERATION")
+      const added = await clientWl.add(data);
+      const url = `https://infura-ipfs.io/ipfs/${added.path}`;
+      const contract = await connectingWithSmartContract();
+      await contract.addToWhitelist(walletAddress,username);
+      //router.push("/searchPage");
+    } catch (error) {
+      console.log("Error while adding whitelisted wallet");
       console.log(error);
     }
   };
@@ -313,6 +345,7 @@ export const NFTMarketplaceProvider = (({ children }) => {
   return (
     <NFTMarketplaceContext.Provider
       value={{
+        addToWhitelist,
         checkIfWalletConnected,
         connectWallet,
         disconnectWallet,
