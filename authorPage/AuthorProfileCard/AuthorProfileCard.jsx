@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import {
@@ -20,7 +20,7 @@ import Style from "./AuthorProfileCard.module.css";
 import images from "../../img";
 import { Button1 } from "../../components/componentindex.js";
 
-const AuthorProfileCard = ({currentAccount,connectWallet,checkWhitelist,checkOwner}) => {
+const AuthorProfileCard = ({ currentAccount, connectWallet, checkWhitelist, checkOwner }) => {
   const [share, setShare] = useState(false);
   const [report, setReport] = useState(false);
 
@@ -148,7 +148,7 @@ const AuthorProfileCard = ({currentAccount,connectWallet,checkWhitelist,checkOwn
 
             )}
           </div>
-          <Button1 btnName="Follow" handleClick={() => {}} />
+          <Button1 btnName="Follow" handleClick={() => { }} />
           <MdCloudUpload
             onClick={() => openShare()}
             className={Style.AuthorProfileCard_box_share_icon}
@@ -203,26 +203,20 @@ const AuthorProfileCard = ({currentAccount,connectWallet,checkWhitelist,checkOwn
           )}
         </div>
         <div className={Style.navbar_container_right_button}>
-            {currentAccount == "" ? (
-              <Button1 btnName="Connect" handleClick={() => connectWallet()} />
-            ) : (
-              <Button1
-                btnName="Add Whitelist Wallet"
-                handleClick={
-                  () => {
-                    if (ownerCheckResult) {
-                      router.push("/addwhitelist");
-                      console.log("whitelistCheckResult");
-
-                    } else {
-                      alert("Error: You are not owner of the Contract.");
-                    }
-                  }
+          {ownerCheckResult ? (
+            <Button1
+              btnName="Add Whitelist Wallet"
+              handleClick={
+                () => {
+                    router.push("/addwhitelist");
+                    console.log("ownerCheckResult");  
                 }
-              />
-
-            )}
-          </div>
+              }
+            />
+          ) : (
+            <div div/>
+          )}
+        </div>
       </div>
     </div>
   );
