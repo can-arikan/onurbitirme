@@ -4,9 +4,7 @@ import { useRouter } from "next/router";
 //INTERNAL IMPORT
 import Style from "./Upload.module.css";
 import formStyle from "../AccountPage/Form/Form.module.css";
-import images from "../img";
 import { Button1 } from "../components/componentindex.js";
-import { DropZone } from "../UploadNFT/uploadNFTIndex.js";
 
 const AddWhitelistWallet = ({addToWhitelist}) => {
   const [name, setUserame] = useState("");
