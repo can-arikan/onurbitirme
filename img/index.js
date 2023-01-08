@@ -34,6 +34,8 @@ import vimeo from "./vimeo.svg";
 import vector from "./VectorHIW.svg";
 import zgcmq from "./zgcmq.svg";
 import hero from "./hero.png";
+import main_banner from "./main_SUbanner.jpeg";
+import second_banner from "./nft_banner.jpeg";
 import nft_1 from "./nft_1.png";
 import getAble from "./getable.png";
 import nft_image_1 from "./nft-image-1.png";
@@ -60,6 +62,8 @@ import default_user from "./default_user.jpeg";
 
 export default {
   hero2,
+  main_banner,
+  second_banner,
   founder1,
   founder2,
   founder3,

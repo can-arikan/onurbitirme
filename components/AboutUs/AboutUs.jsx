@@ -11,10 +11,10 @@ const AboutUs = () => {
       <div className={Style.aboutUs_box}>
         <div className={Style.aboutUs_box_left}>
           <Image
-            src={images.aboutus}
+            src={images.second_banner}
             alt="About us section"
-            width={700}
-            height={500}
+            width={800}
+            height={400}
           />
         </div>
         <div className={Style.aboutUs_box_right}>

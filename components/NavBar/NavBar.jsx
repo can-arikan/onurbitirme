@@ -124,8 +124,8 @@ const NavBar = () => {
               <Image
                 src={images.logo}
                 alt="SU NFT"
-                width={120}
-                height={120}
+                width={140}
+                height={140}
               />
             </div>
           </div>
