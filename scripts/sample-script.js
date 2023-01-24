@@ -13,7 +13,7 @@ async function main() {
   // We get the contract to deploy
   //const deployer = await hre.ethers.getSigners()[0];
   const NFTMarketplace = await hre.ethers.getContractFactory("NFTMarketplace");
-  const NFTMarketplaceDeployer = await hre.ethers.getSigner(NFTMarketplace.address);
+  const NFTMarketplaceDeployer = await hre.ethers.getSigners(NFTMarketplace.address);
   
 
   const nftMarketplace = await NFTMarketplace.deploy();
