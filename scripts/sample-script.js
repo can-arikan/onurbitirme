@@ -11,8 +11,8 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  //const deployer = await hre.ethers.getSigners()[0];
-  const NFTMarketplace = await hre.ethers.getContractFactory("NFTMarketplace");
+  const deployer = await hre.ethers.getSigners()[0];
+  const NFTMarketplace = await hre.ethers.getContractFactory("NFTMarketplace", deployer);
   const NFTMarketplaceDeployer = await hre.ethers.getSigners(NFTMarketplace.address);
   
 
@@ -23,7 +23,7 @@ async function main() {
   await nftMarketplace.deployed();
 
   console.log("NFTMarketplace deployed to:", nftMarketplace.address);
-  //console.log("NFTMarketplace deployed by following address:", nftMarketplace.owner());
+  console.log("NFTMarketplace deployed by following address:", nftMarketplace.owner());
 
 }
 

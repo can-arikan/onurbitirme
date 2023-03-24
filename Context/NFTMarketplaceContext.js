@@ -233,7 +233,9 @@ export const NFTMarketplaceProvider = (({ children }) => {
   const fetchNFTs = async () => {
     axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
     try {
-      const provider = new ethers.providers.JsonRpcProvider();
+      const provider = new ethers.providers.JsonRpcProvider(
+        "https://polygon-mumbai.infura.io/v3/c189a4f197f94261814cf2f0334463de"
+      );
       const contract = fetchContract(provider);
 
       const data = await contract.fetchMarketItems();
@@ -268,7 +270,7 @@ export const NFTMarketplaceProvider = (({ children }) => {
         )
       );
 
-      // console.log(items);
+      console.log(items);
       return items;
     } catch (error) {
       console.log("Error while fetching nft");

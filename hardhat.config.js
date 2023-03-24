@@ -16,17 +16,17 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 /**
  * @type import('hardhat/config').HardhatUserConfig
  */
-/*polygon_mumbai: {
-      // chainId: 80001,
-      url: "https://polygon-mumbai.g.alchemy.com/v2/OoInLrxpGqo3lRRQSMEhuBLh-mecRUBQ",
-      // url: process.env.POLYGON_MUMBAI,
-      accounts: [
-        `0x${"5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a"}`,
-      ],
-    },*/
 module.exports = {
   solidity: "0.8.4",
   networks: {
+    polygon_mumbai: {
+          chainId: 80001,
+          url: "https://polygon-mumbai.g.alchemy.com/v2/OoInLrxpGqo3lRRQSMEhuBLh-mecRUBQ",
+          // url: process.env.POLYGON_MUMBAI,
+          accounts: [
+            `0x${"5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a"}`,
+          ],
+        },
     hardhat: {},
   },
 };
