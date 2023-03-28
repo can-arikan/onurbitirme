@@ -7,12 +7,17 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 abstract contract MarketItemHolder {
     struct MarketItem {
+        address collection_address;
         string collection;
+        string description;
         uint256 tokenId;
         address payable seller;
         address payable owner;
         uint256 price;
         bool sold;
     }
-    mapping(uint256 => MarketItem) private idToMarketItem;
+    mapping(uint256 => MarketItem) idToMarketItem;
+
+    function resellToken(uint256 tokenId, uint256 price) virtual public payable;
+    function createMarketSale(uint256 tokenId) virtual public payable;
 }

@@ -155,7 +155,7 @@ export const NFTMarketplaceProvider = (({ children }) => {
       const added = await clientWl.add(data);
       const url = `https://infura-ipfs.io/ipfs/${added.path}`;
       const contract = await connectingWithSmartContract();
-      await contract.addToWhitelist(walletAddress,username);
+      await contract.addToWhitelist(walletAddress, username);
       //router.push("/searchPage");
     } catch (error) {
       console.log("Error while adding whitelisted wallet");

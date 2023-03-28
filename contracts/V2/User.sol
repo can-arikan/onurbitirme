@@ -5,19 +5,38 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
+
+
 abstract contract UserHolder {
-    mapping(address => string) users;
+    struct User {
+        string userName;
+        string profilePicture;
+        string email;
+    }
+    
+    mapping(address => User) users;
     address[] userAddresses;
 
-    function createUser(string memory name) public {
+    function createUser(string memory name, string memory emailAddress, string memory pictureUri) public {
         require(doesAddressExists(msg.sender) == false);
-        users[msg.sender] = name;
+        users[msg.sender].userName = name;
+        users[msg.sender].profilePicture = pictureUri;
+        users[msg.sender].email = emailAddress;
+        userAddresses.push(msg.sender);
     }
-    function updateUser(string memory name) public {
+    function updateUserName(string memory name) public {
         require(doesAddressExists(msg.sender));
-        users[msg.sender] = name;
+        users[msg.sender].userName = name;
     }
-    function userName(address user) public view returns(string memory){
+    function updateUserPicture(string memory pictureUri) public {
+        require(doesAddressExists(msg.sender));
+        users[msg.sender].userName = pictureUri;
+    }
+    function updateUserEmail(string memory emailAddress) public {
+        require(doesAddressExists(msg.sender));
+        users[msg.sender].userName = emailAddress;
+    }
+    function getUser(address user) public view returns(User memory){
         require(doesAddressExists(user));
         return users[user];
     }

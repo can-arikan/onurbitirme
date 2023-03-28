@@ -21,8 +21,10 @@ const Home = () => {
     // if (currentAccount) {
     fetchNFTs().then((items) => {
       console.log(nfts);
-      setNfts(items.reverse());
-      setNftsCopy(items);
+      if (items !== undefined) {
+        setNfts(items.reverse());
+        setNftsCopy(items);
+      }
     });
     // }
   }, []);
