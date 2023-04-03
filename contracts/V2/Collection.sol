@@ -96,6 +96,16 @@ abstract contract CollectionHolder {
 
     Collection[] collectionsArray;
 
+    struct CollectionJSON {
+        string collectionName;
+        address collectionAddress;
+        string collectionImage;
+        string collectionDescription;
+        uint256 collectionLikesCount;
+        address collectionOwner;
+        uint256 collectionNftLikes;
+    }
+
     modifier inCollectionArray(address _address) {
         bool isIn = false;
         for (uint256 i = 0; i < _collectionIds.current(); i++) {
@@ -127,26 +137,41 @@ abstract contract CollectionHolder {
         return collectionAddresses;
     }
 
-    function getCollections(address owner_) public view returns (Collection[] memory) {
+    function getCollections(address owner_) public view returns (CollectionJSON[] memory) {
         uint256 size = 0;
         for (uint256 i = 0; i < _collectionIds.current(); i++) {
             if (collectionsArray[i].owner() == owner_) size += 1;
         }
-        Collection[] memory myCollections = new Collection[](size);
+        CollectionJSON[] memory myCollections = new CollectionJSON[](size);
         uint256 idx = 0;
         for (uint256 i = 0; i < _collectionIds.current(); i++) {
-            if (collectionsArray[i].owner() == owner_) myCollections[idx] = collectionsArray[i];
-            idx += 1;
+            if (collectionsArray[i].owner() == owner_) {
+                uint256 totalNftLikes = 0;
+                for (uint256 j = 0; j < collectionsArray[i].currentTokenId(); j++) {
+                    totalNftLikes += collectionsArray[i].getNFTsAllLiked(j).length;
+                }
+                myCollections[idx] = CollectionJSON({
+                    collectionName: collectionsArray[i].name(),
+                    collectionAddress: address(collectionsArray[i]),
+                    collectionImage: collectionsArray[i]._collectionHolderImage(),
+                    collectionDescription: collectionsArray[i]._description(),
+                    collectionLikesCount: collectionsArray[i].getAllLiked().length,
+                    collectionOwner: collectionsArray[i].owner(),
+                    collectionNftLikes: totalNftLikes
+                });
+                idx += 1;
+            }
         }
         return myCollections;
     }
 
-    function findCollection(address _owner, string memory collectionName) public view returns(uint256) {
+    function findCollection(address owner_, string memory collectionName) public view returns(uint256) {
         for (uint256 i = 0; i < _collectionIds.current(); i++) {
-            if (collectionsArray[i].owner() == _owner && compare(collectionsArray[i].name(), collectionName)) return i;
+            if (collectionsArray[i].owner() == owner_ && compare(collectionsArray[i].name(), collectionName)) return i;
         }
         return (_collectionIds.current() + 1);
     }
+    
     function getListingPrice() public view returns(uint256) {
         return listingPrice;
     }
