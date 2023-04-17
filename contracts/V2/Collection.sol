@@ -105,9 +105,15 @@ abstract contract CollectionHolder {
     Counters.Counter _collectionIds;
 
     uint256 listingPrice;
-    string[] availableCategories;
+    Category[] availableCategories;
     
     Collection[] collectionsArray;
+
+    struct Category {
+        string name;
+        string frontPicture;
+        string backgroundPicture;
+    }
 
     struct CollectionJSON {
         string collectionName;
@@ -117,6 +123,7 @@ abstract contract CollectionHolder {
         uint256 collectionLikesCount;
         address collectionOwner;
         uint256 collectionNftLikes;
+        string[] collectionCategories;
     }
 
     modifier inCollectionArray(address _address) {
@@ -126,6 +133,25 @@ abstract contract CollectionHolder {
         }
         require(isIn);
         _;
+    }
+
+    function setCategories(Category[] memory categories) virtual public;
+
+    function getCategoryByName(string memory catName) public view returns (Category memory) {
+        for (uint256 i = 0; i < availableCategories.length; i++) {
+            if (compare(availableCategories[i].name, catName)) {
+                return availableCategories[i];
+            }
+        }
+        revert("Could Not Find The Category");
+    }
+
+    function getCategories() public view returns (string[] memory) {
+        string[] memory cats = new string[](availableCategories.length);
+        for (uint256 i = 0; i < availableCategories.length; i++) {
+            cats[i] = availableCategories[i].name;
+        }
+        return cats;
     }
 
     function collectionIdx(address _address) public view returns(uint256) {
@@ -172,7 +198,8 @@ abstract contract CollectionHolder {
                     collectionDescription: collectionsArray[i]._description(),
                     collectionLikesCount: collectionsArray[i].getAllLiked().length,
                     collectionOwner: collectionsArray[i].owner(),
-                    collectionNftLikes: totalNftLikes
+                    collectionNftLikes: totalNftLikes,
+                    collectionCategories: collectionsArray[i].getCategory()
                 });
                 idx += 1;
             }
@@ -197,14 +224,14 @@ abstract contract CollectionHolder {
 
     function checkCategories(string[] memory categories) private view returns (bool) {
         for (uint256 i = 0; i < categories.length; i++) {
-            if (!isInListStrStr(categories[i], availableCategories)) return false;
+            if (!isInListStrCat(categories[i], availableCategories)) return false;
         }
         return true;
     }
 
-    function isInListStrStr(string memory str, string[] memory lst) private pure returns (bool) {
+    function isInListStrCat(string memory str, Category[] memory lst) private pure returns (bool) {
         for (uint256 i = 0; i < lst.length; i++) {
-            if (compare(lst[i], str)) return true;
+            if (compare(lst[i].name, str)) return true;
         }
         return false;
     }

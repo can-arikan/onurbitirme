@@ -27,6 +27,10 @@ contract NFTMarketplaceV2 is UserHolder, CollectionHolder, MarketItemHolder {
         owner = msg.sender;
     }
 
+    function setCategories(Category[] memory categroies) override public onlyOwner {
+        availableCategories = categroies;
+    }
+
     function marketOwner() public view returns(address) {
         return owner;
     }
@@ -108,7 +112,7 @@ contract NFTMarketplaceV2 is UserHolder, CollectionHolder, MarketItemHolder {
         idToMarketItem[tokenId].seller = payable(address(0));
     }
     
-    function fetchMarketItems() public view returns (MarketItem[] memory) {
+    function fetchMyMarketItems() public view returns (MarketItem[] memory) {
         uint256 itemCount = _tokenIds.current();
         uint256 unsoldItemCount = _tokenIds.current() - _itemsSold.current();
         uint256 currentIndex = 0;
@@ -170,7 +174,7 @@ contract NFTMarketplaceV2 is UserHolder, CollectionHolder, MarketItemHolder {
         return count;
     }
 
-    function fetchItemsListed() public view returns (MarketItem[] memory) {
+    function fetchMyListedItems() public view returns (MarketItem[] memory) {
         uint256 totalItemCount = _tokenIds.current();
         uint256 itemCount = 0;
         uint256 currentIndex = 0;
