@@ -18,6 +18,5 @@ abstract contract MarketItemHolder {
     }
     mapping(uint256 => MarketItem) idToMarketItem;
 
-    function resellToken(uint256 tokenId, uint256 price) virtual public payable;
-    function createMarketSale(uint256 tokenId) virtual public payable;
+    function createMarketSale(uint256 tokenId) public payable virtual;
 }
