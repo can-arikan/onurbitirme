@@ -16,6 +16,7 @@ contract Collection is ERC721URIStorage {
     address _owner;
     string public _collectionHolderImage;
     string public _description;
+    string[] categories;
 
     modifier onlyOwner() {
         require(_owner == msg.sender);
@@ -41,10 +42,20 @@ contract Collection is ERC721URIStorage {
         _;
     }
 
-    constructor(string memory collectionName, string memory collectionSymbol, string memory collectionImage, string memory description, address owner_) ERC721(collectionName, collectionSymbol) {
+    constructor(string memory collectionName, string memory collectionSymbol, string memory collectionImage, string memory description, address owner_, string[] memory category) ERC721(collectionName, collectionSymbol) {
         _owner = owner_;
         _description = description;
         _collectionHolderImage = collectionImage;
+        categories = category;
+        _owner = msg.sender;
+    }
+
+    function getCategory() onlyOwner public view returns (string[] memory) {
+        return categories;
+    }
+
+    function setCategory(string[] memory cat) onlyOwner public {
+        categories = cat;
     }
     
     function currentTokenId() public view returns (uint256) {
@@ -86,6 +97,7 @@ contract Collection is ERC721URIStorage {
     function getAllLiked() public view returns(address[] memory) {
         return likedBy;
     }
+
 }
 
 abstract contract CollectionHolder {
@@ -93,7 +105,8 @@ abstract contract CollectionHolder {
     Counters.Counter _collectionIds;
 
     uint256 listingPrice;
-
+    string[] availableCategories;
+    
     Collection[] collectionsArray;
 
     struct CollectionJSON {
@@ -122,9 +135,11 @@ abstract contract CollectionHolder {
         return (_collectionIds.current() + 1);
     }
 
-    function createCollection(string memory collectionName, string memory collectionSymbol, string memory collectionImage, string memory description) public {
+    function createCollection(string memory collectionName, string memory collectionSymbol, string memory collectionImage, string memory description, string[] memory categories) public payable {
         require(findCollection(msg.sender, collectionName) == (_collectionIds.current() + 1));
-        Collection newCollection = new Collection(collectionName, collectionSymbol, collectionImage, description, msg.sender);
+        require(_checkBalance(msg.value));
+        require(checkCategories(categories));
+        Collection newCollection = new Collection(collectionName, collectionSymbol, collectionImage, description, msg.sender, categories);
         collectionsArray.push(newCollection);
         _collectionIds.increment();
     }
@@ -178,5 +193,23 @@ abstract contract CollectionHolder {
 
     function compare(string memory str1, string memory str2) internal pure returns (bool) {
         return keccak256(abi.encodePacked(str1)) == keccak256(abi.encodePacked(str2));
+    }
+
+    function checkCategories(string[] memory categories) private view returns (bool) {
+        for (uint256 i = 0; i < categories.length; i++) {
+            if (!isInListStrStr(categories[i], availableCategories)) return false;
+        }
+        return true;
+    }
+
+    function isInListStrStr(string memory str, string[] memory lst) private pure returns (bool) {
+        for (uint256 i = 0; i < lst.length; i++) {
+            if (compare(lst[i], str)) return true;
+        }
+        return false;
+    }
+
+    function _checkBalance(uint256 price) private view returns (bool) {
+        return getListingPrice() <= price;
     }
 }
