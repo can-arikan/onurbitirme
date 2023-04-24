@@ -164,7 +164,7 @@ abstract contract CollectionHolder {
             if (address(collectionsArray[i]) == collectionAddress) inArray = true;
         }
         require(inArray);
-        require(listingPrice <= msg.value);
+        require(listingPrice >= msg.value);
         require(checkCategories(categories));
         ERC721 existing = ERC721(collectionAddress);
         Collection newCollection = new Collection(
@@ -213,7 +213,7 @@ abstract contract CollectionHolder {
             findCollection(msg.sender, collectionName) ==
                 (_collectionIds.current() + 1)
         );
-        require(listingPrice <= msg.value);
+        require(listingPrice >= msg.value);
         require(checkCategories(categories));
         Collection newCollection = new Collection(
             collectionName,
